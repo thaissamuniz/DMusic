@@ -34,18 +34,6 @@ public class DmusicApplication {
                 });
                 break;
             }
-            case 2: {
-                log.info("Defina um nome para sua playlist");
-                String playlistName = scanner.next();
-                Playlist playlist = new Playlist();
-                playlist.setName(playlistName);
-                break;
-            }
-            case 3: {
-                log.info("Informe o ID da música que você deseja adicionar a playlist");
-                String id = scanner.next();
-
-            }
         }
 //
 //		AlbumService albumService = new AlbumService();

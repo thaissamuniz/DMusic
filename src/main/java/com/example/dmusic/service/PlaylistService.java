@@ -5,34 +5,36 @@ import com.example.dmusic.model.Track;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 public class PlaylistService {
+    private Playlist playlist;
 
-    public Playlist create(){
-        return new Playlist();
+    public void create(int userId, String name, List<String> tags ) {
+        this.playlist = new Playlist(userId, name, tags);
     }
 
-    public List<Track> getAll(List<Track> playlist){
-        return playlist;
-    }
-
-    public void addTrack(String id, TrackService trackService, List<Track> tracks) {
-        Track track = trackService.getTrackById(id);
-        if(track.getId() != null) {
-            tracks.add(track);
+    public Playlist getAll() {
+        if(this.playlist.getTracks().isEmpty()){
+            return null;
         }
+        return this.playlist;
     }
 
-    public void add(String id, List<Track> tracks, TrackService trackService) {
+    public Track addTrack(String id, TrackService trackService) {
         Track track = trackService.getTrackById(id);
-        tracks.add(track);
-    }
-
-    public void deleteTrack(String id, TrackService trackService, List<Track> tracks) {
-        Track track = trackService.getTrackById(id);
-        if(track != null) {
-            tracks.remove(track);
+        if (track.getId() != null) {
+            this.playlist.getTracks().add(track);
+            return track;
         }
+        return null;
+    }
+
+    public Track deleteTrack(String id, TrackService trackService) {
+        Track track = trackService.getTrackById(id);
+        if (track.getId() != null) {
+            this.playlist.getTracks().remove(track);
+            return track;
+        }
+        return null;
     }
 }
