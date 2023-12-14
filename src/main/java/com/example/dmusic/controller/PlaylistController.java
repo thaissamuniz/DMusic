@@ -2,6 +2,7 @@ package com.example.dmusic.controller;
 
 import com.example.dmusic.controller.dto.PlaylistDTO;
 import com.example.dmusic.controller.dto.PlaylistUpdateDTO;
+import com.example.dmusic.exception.ResourceNotFoundException;
 import com.example.dmusic.model.Playlist;
 import com.example.dmusic.controller.dto.PlaylistCreteDTO;
 import com.example.dmusic.service.PlaylistService;
@@ -19,6 +20,7 @@ import java.util.List;
 @Slf4j
 public class PlaylistController {
     private final PlaylistService playlistService;
+
     public PlaylistController(PlaylistService playlistService) {
         this.playlistService = playlistService;
     }
@@ -40,17 +42,27 @@ public class PlaylistController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> update(@PathVariable String id, @RequestBody PlaylistUpdateDTO playlistDTO) {
-        Playlist playlist = playlistDTO.toModel();
-        playlist.setId(id);
-        playlistService.update(playlist);
-        log.info("Playlist {} atualizada com sucesso!", id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        try {
+            Playlist playlist = playlistDTO.toModel();
+            playlist.setId(id);
+            playlistService.update(playlist);
+            log.info("Playlist {} atualizada com sucesso!", id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma playlist com este ID");
+
+        }
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable String id) {
-        playlistService.delete(id);
-        log.info("Playlist {} deletada com sucesso!", id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        try {
+            playlistService.delete(id);
+            log.info("Playlist {} deletada com sucesso!", id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma playlist com este ID");
+        }
     }
 }

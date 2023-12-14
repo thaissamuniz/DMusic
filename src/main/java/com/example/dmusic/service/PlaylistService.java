@@ -1,5 +1,6 @@
 package com.example.dmusic.service;
 
+import com.example.dmusic.exception.ResourceNotFoundException;
 import com.example.dmusic.model.Playlist;
 import com.example.dmusic.model.Track;
 import org.springframework.stereotype.Service;
@@ -47,13 +48,15 @@ public class PlaylistService {
     }
 
     public void update(Playlist playlist) {
+        if (!this.playlists.containsKey(playlist.getId())) throw new ResourceNotFoundException("Playlist Inexistente");
         Playlist playlistToUpdate = this.playlists.get(playlist.getId());
         playlistToUpdate.setName(playlist.getName());
         playlistToUpdate.setTags(playlist.getTags());
-        playlistToUpdate.setTracks(playlist.getTracks());
+        fillTracksDetail(playlistToUpdate);
     }
 
     public void delete(String id) {
+        if (!this.playlists.containsKey(id)) throw new ResourceNotFoundException("Playlist Inexistente");
         this.playlists.remove(id);
     }
 }

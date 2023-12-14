@@ -30,8 +30,10 @@ public class TrackService {
             HttpResponse<String> response = getHttpResponse(client, request);
             ObjectMapper mapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
             var deezerResponse = mapper.readValue(response.body(), DeezerTrackResponse.class);
+            log.info("statusCode: {}", response.statusCode());
             return deezerResponse.getData();
         } catch (URISyntaxException | IOException | InterruptedException e) {
+            log.error("Algo deu errado ao consultar a API", e);
             throw new RuntimeException(e);
         }
     }
@@ -43,10 +45,11 @@ public class TrackService {
             HttpClient client = getHttpClient();
             HttpResponse<String> response = getHttpResponse(client, request);
             var trackResponse = mapper.readValue(response.body(), Track.class);
+            log.info("statusCode: {}", response.statusCode());
             log.info("trackResponse: {}", trackResponse);
             return trackResponse;
         } catch (URISyntaxException | IOException | InterruptedException e) {
-            log.error("", e);
+            log.error("Algo deu errado ao consultar a API", e);
             throw new RuntimeException(e);
         }
     }
