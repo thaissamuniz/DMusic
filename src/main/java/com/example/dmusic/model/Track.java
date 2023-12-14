@@ -10,4 +10,10 @@ public class Track {
     private String title;
     private Artist artist;
     private Album album;
+
+    public Track(String id) {
+        this.id = id;
+    }
+
+    public Track() {}
 }
