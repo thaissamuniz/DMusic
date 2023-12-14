@@ -4,7 +4,7 @@ API REST para gerenciar playlists de música.
 
 ## Rotas
 
-*   GET /tracks?name=""
+*   GET /track?name=""
     *   Retorna diversas informações das músicas encontradas com o nome passado.
 *   GET /playlist
     *   Retorna uma lista com todas as playlists criadas.
